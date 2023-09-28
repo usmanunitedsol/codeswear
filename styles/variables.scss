@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+$PrimaryColor:#DB4D2D;
+$TitleColor:#141414;
+$SecondaryTitle:#1A2130;
+$SecondaryColor:#fff;
+$TextColor:#686868;
+$HighlitedColor:#EC6737;
+
+@mixin mainContainer{max-width:1400px; margin:auto; padding:0px 20px; box-sizing: border-box;}
+@mixin primaryTitle{font-size: 42px; line-height: 50px; text-transform: capitalize; color: $TitleColor; font-family: "Sarabun", sans-serif; padding-bottom:30px;}
+@mixin secondaryTitle{font-size: 22px; line-height: 30px; font-family: 'Sarabun', sans-serif; font-weight: 700; padding-bottom:20px; color: $TitleColor;}
+@mixin primaryText{font-size: 18px; line-height: 28px; color: $TextColor; font-family: 'Roboto', sans-serif; padding-bottom: 30px;}
+
+
+.main_container{
+	@include mainContainer();
+}
+
+.section_padding{
+	padding:60px 0px; box-sizing: border-box;
+	&.zero_top{
+		padding-top:0px;
+	}
+}
+
+.section_bg{background-color: #FFF7F2;}
