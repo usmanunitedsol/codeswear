@@ -1,9 +1,30 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import { parse } from 'postcss'
+import React, { useState } from 'react'
 
-const Slug = () => {
+const Slug = ({addtoCart}) => {
     const router=useRouter()
     const {slug}= router.query
+
+    const [pin, setpin] = useState()
+    const [validpin, setvalidpin] = useState()
+
+    const checkServiceability = async()=>{
+      const pinData = await fetch("http://localhost:3000/api/Pincode");
+      const parsepin=await pinData.json();
+      if(parsepin.includes(parseInt(pin)))
+      {
+        setvalidpin(true)
+      }
+      else{
+        setvalidpin(false)
+      }
+  
+    }
+
+    const pinhandler=(e)=>{
+      setpin(e.target.value);
+    }
 
   return (
     <div className='main_container'>
@@ -76,15 +97,39 @@ const Slug = () => {
             </div>
           </div>
         </div>
-        <div className="flex">
+        <div className="flex flex-wrap md:flex-nowrap">
           <span className="title-font font-medium text-2xl text-gray-900">$58.00</span>
-          <button className="flex ml-14 text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded">Add to Cart</button>
-          <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+          <button className="rounded-full md:hidden w-10 h-10 bg-gray-200 p-0 border-0 inline-flex ml-10 items-center justify-center text-gray-500 ">
+            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+            </svg>
+          </button>
+          <div className='btnwrapper flex justify-between md:justify-normal gap-4 my-4 sm:gap-0 sm:my-0'>
+          <button onClick={()=>{addtoCart(slug,1,499,'Wear the code','XL','Red')}} className="flex  sm:ml-8 text-white bg-pink-500 border-0 py-2 px-2 md:px-6 focus:outline-none hover:bg-pink-600 rounded disabled:opacity-25" disabled={validpin==false}>Add to Cart</button>
+          <button className="flex  sm:ml-4 text-white bg-pink-500 border-0 py-2 px-2 md:px-6 focus:outline-none hover:bg-pink-600 rounded">Buy Now</button>
+          </div>
+          <button className="hidden md:flex mx-3 rounded-full w-10 h-10 bg-gray-200 p-0 border-0  items-center justify-center text-gray-500 ">
             <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5" viewBox="0 0 24 24">
               <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
             </svg>
           </button>
         </div>
+        <div className='pin  mt-6 flex space-x-2 text-sm'>
+          <input onChange={pinhandler} className=' border-2 w-3/5 border-gray-600 rounded-md' type='text' placeholder='Enter your Pincode'/>
+          <button onClick={checkServiceability} className="flex ml-14 text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded">Check</button>
+
+        </div>
+        {
+          !validpin && validpin!=null && <div className='text-red-700 text-sm mt-3'>
+             Sorry! We do not deliver to this package
+          </div>
+        }
+
+           {
+          validpin && validpin!=null && <div className='text-green-700 text-sm mt-3'>
+             Yes! This pincode is serviceable
+          </div>
+        }
       </div>
     </div>  
   </div>
