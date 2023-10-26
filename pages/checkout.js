@@ -54,7 +54,7 @@ const checkout = ({cart,addtoCart,removeFromCart,clearCart,subTotal}) => {
         {Object.keys(cart).map((k)=>{
          return <li key={k}>
          <div className='item flex my-5'>
-          <div className='w-1/5 font-semibold'>{cart[k].name}</div>
+          <div className='w-1/5 font-semibold'>{cart[k].name} ({cart[k].size}/{cart[k].variant})</div>
           <div className='flex font-semibold items-center justify-center w-1/12 text-lg'>
         
 

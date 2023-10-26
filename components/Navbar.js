@@ -6,17 +6,18 @@ import { BsFillBagFill  } from "react-icons/bs";
 import { MdAccountCircle  } from "react-icons/md";
 import { AiFillCloseCircle, AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 
-const Navbar = ({cart,addtoCart,removeFromCart,clearCart,subTotal}) => {
+const Navbar = ({logout,user,cart,addtoCart,removeFromCart,clearCart,subTotal}) => {
 
   const [open, setopen] = useState(false)
+  const [dropdown, setdropdown] = useState(false)
   const toggleCart =()=>{
     setopen(!open)
   }
   return (
     <div className='main_container shadow-xl sticky top-0 bg-white z-10'>
     
-    <div className='head flex flex-col md:flex-row md:justify-start justify-center items-center relative  py-2 '>  
-    <div className='logo mx-5'>
+    <div className='head flex flex-col md:flex-row md:justify-start justify-center items-center relative  py-0 sm:py-2 '>  
+    <div className='logo mr-10 sm:mx-5'>
     <Link  href={'/'}>
         <Image src='/images/logo.webp' width={200} height={50}/>
      </Link>
@@ -31,8 +32,23 @@ const Navbar = ({cart,addtoCart,removeFromCart,clearCart,subTotal}) => {
     </nav>
 
    
-        <div className={`cart flex absolute right-0 top-4 cursor-pointer mx-5`}  >
-        <Link href={"/login"}>   <MdAccountCircle className='text-xl md:text-3xl mx-2'/></Link>
+        <div className={`cart flex absolute items-center right-0 top-4 cursor-pointer mx-5`}  >
+     <div  onMouseOver={()=>{setdropdown(true)}} onMouseLeave={()=>{setdropdown(false)}}>
+     {dropdown &&  <div onMouseOver={()=>{setdropdown(true)}} onMouseLeave={()=>{setdropdown(false)}} className='absolute right-10 border bg-white shadow-lg  top-7 py-4 rounded-md px-5 w-32 '>
+
+          <ul>
+            <Link href={'/'}><li className='py-1 hover:text-pink-700 font-bold text-sm'>My Acount</li></Link>
+            <Link href={'/'}><li className='py-1 hover:text-pink-700 font-bold text-sm'>Orders</li></Link>
+            <li onClick={logout} className='py-1 hover:text-pink-700 font-bold text-sm'>Logout</li>
+          </ul>
+
+        </div>}
+        { user.value &&  <MdAccountCircle  className='text-xl md:text-3xl mx-2'/>}
+        </div> 
+      
+
+
+      { !user.value && <Link href={"/login"}> <button className='mx-3 text-white bg-pink-500 border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-sm '>Login</button></Link>}
           <FaShoppingCart  onClick={toggleCart}  className={`2xl md:text-3xl  ${!open ? "block" : "hidden "}`}/>
         </div>
    
@@ -44,7 +60,7 @@ const Navbar = ({cart,addtoCart,removeFromCart,clearCart,subTotal}) => {
         {Object.keys(cart).map((k)=>{
          return <li key={k}>
          <div className='item flex my-5'>
-          <div className='w-2/3 font-semibold'>{cart[k].name}</div>
+          <div className='w-2/3 font-semibold'>{cart[k].name} ({cart[k].size}/{cart[k].variant})</div>
           <div className='flex font-semibold items-center justify-center w-1/3 text-lg'>
         
 
@@ -60,7 +76,7 @@ const Navbar = ({cart,addtoCart,removeFromCart,clearCart,subTotal}) => {
       <div className='total font-bold my-2'>Subtotal: €{subTotal}</div>
       <div className='flex'>
       <Link href={"/checkout"}> <button className='flex mx-auto  text-white bg-pink-500 border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-sm '><BsFillBagFill className="m-1"/>  Checkout</button></Link>
-      <button onClick={clearCart} className='flex ml-3 text-white bg-pink-500 border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-sm m '><BsFillBagFill className="m-1"/>  Clear all</button>
+      <button onClick={clearCart} className='flex ml-3 text-white bg-pink-500 border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-sm  '><BsFillBagFill className="m-1"/>  Clear all</button>
     </div>
     </div>
     </div>
